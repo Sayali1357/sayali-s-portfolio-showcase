@@ -1,24 +1,9 @@
 import { GraduationCap } from "lucide-react";
-
-const education = [
-  {
-    degree: "B.Tech in Computer Science",
-    institution: "KKW Institute of Engineering Technology and Research",
-    years: "2023 - 2027",
-  },
-  {
-    degree: "12th Grade",
-    institution: "Loknete Vyankatrao Hirey College of Science, Commerce and Arts",
-    years: "2021 - 2023",
-  },
-  {
-    degree: "10th Grade",
-    institution: "Shree Swaminarayan English Medium School",
-    years: "2018 - 2021",
-  },
-];
+import { useEducation } from "@/hooks/usePortfolioData";
 
 const EducationSection = () => {
+  const { data: education } = useEducation();
+
   return (
     <section id="education" className="py-24">
       <div className="container mx-auto px-6">
@@ -27,9 +12,9 @@ const EducationSection = () => {
         </h2>
 
         <div className="space-y-4">
-          {education.map((edu) => (
+          {(education || []).map((edu) => (
             <div
-              key={edu.degree}
+              key={edu.id}
               className="card-glass rounded-xl p-6 flex items-center gap-6 hover:glow-border transition-all duration-300"
             >
               <div className="w-14 h-14 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">

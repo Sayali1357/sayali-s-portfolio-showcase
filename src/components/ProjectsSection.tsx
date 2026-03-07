@@ -1,44 +1,9 @@
 import { ArrowRight } from "lucide-react";
-
-const projects = [
-  {
-    title: "Smart Attendance System",
-    emoji: "📸",
-    description: "A web-based system using OpenCV for face detection, Flask for the interface, and KNN for recognition. Enables student registration, model training, and more.",
-    tags: ["Python", "OpenCV", "Flask", "KNN"],
-    color: "bg-blue-500",
-  },
-  {
-    title: "Stock Monitoring & Billing",
-    emoji: "💻",
-    description: "A Django-based web app with user authentication, product management, and bill generation. Tracks stock, manages sessions, and generates bills.",
-    tags: ["Django", "SQLite", "HTML", "CSS"],
-    color: "bg-destructive",
-  },
-  {
-    title: "StudyGenius – AI Exam Assistant",
-    emoji: "📝",
-    description: "An AI-powered platform that generates MCQs, sample papers, and personalized study schedules using Gemini API.",
-    tags: ["Python", "Flask", "Gemini API", "Tailwind"],
-    color: "bg-blue-600",
-  },
-  {
-    title: "InsureEase – Smart Insurance",
-    emoji: "🛡️",
-    description: "A unified platform to manage, track, and pay for all insurance policies, with AI-powered recommendations and gamified rewards.",
-    tags: ["React", "Node.js", "MongoDB", "Stripe"],
-    color: "bg-destructive",
-  },
-  {
-    title: "Student Manager App",
-    emoji: "📊",
-    description: "An offline-first Android app that helps students manage daily schedules, timed tasks, reminders, and track goal progress with AI chatbot.",
-    tags: ["Java", "Android", "SQLite", "Gemini"],
-    color: "bg-blue-500",
-  },
-];
+import { useProjects } from "@/hooks/usePortfolioData";
 
 const ProjectsSection = () => {
+  const { data: projects } = useProjects();
+
   return (
     <section id="projects" className="py-24">
       <div className="container mx-auto px-6">
@@ -52,9 +17,9 @@ const ProjectsSection = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
+          {(projects || []).map((project) => (
             <div
-              key={project.title}
+              key={project.id}
               className="card-glass rounded-xl p-6 flex flex-col justify-between hover:glow-border transition-all duration-300 group"
             >
               <div>
@@ -72,7 +37,7 @@ const ProjectsSection = () => {
                   ))}
                 </div>
               </div>
-              <a href="#" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors group-hover:gap-2">
+              <a href={project.link || "#"} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors group-hover:gap-2">
                 View Project <ArrowRight size={14} />
               </a>
             </div>
