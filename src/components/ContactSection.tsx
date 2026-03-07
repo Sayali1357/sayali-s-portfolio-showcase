@@ -1,16 +1,13 @@
 import { useState } from "react";
-import { Instagram, Linkedin, Github, Mail, Send } from "lucide-react";
+import { Instagram, Linkedin, Github, Mail, Globe, Send, type LucideIcon } from "lucide-react";
 import { toast } from "sonner";
+import { useSocialLinks } from "@/hooks/usePortfolioData";
 
-const socials = [
-  { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Github, href: "#", label: "GitHub" },
-  { icon: Mail, href: "mailto:sayali@example.com", label: "Email" },
-];
+const iconMap: Record<string, LucideIcon> = { Instagram, Linkedin, Github, Mail, Globe };
 
 const ContactSection = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const { data: socials } = useSocialLinks();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,16 +28,19 @@ const ContactSection = () => {
         </div>
 
         <div className="flex justify-center gap-4 mb-12">
-          {socials.map((s) => (
-            <a
-              key={s.label}
-              href={s.href}
-              className="w-12 h-12 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-all"
-              aria-label={s.label}
-            >
-              <s.icon size={20} />
-            </a>
-          ))}
+          {(socials || []).map((s) => {
+            const Icon = iconMap[s.icon_name] || Globe;
+            return (
+              <a
+                key={s.id}
+                href={s.url}
+                className="w-12 h-12 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-all"
+                aria-label={s.platform}
+              >
+                <Icon size={20} />
+              </a>
+            );
+          })}
         </div>
 
         <form onSubmit={handleSubmit} className="card-glass rounded-2xl p-8 space-y-6">
