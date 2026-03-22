@@ -21,7 +21,7 @@ const ExpertiseSection = () => {
             const Icon = iconMap[skill.icon_name] || Code;
             return (
               <div
-                key={skill.id}
+                key={skill._id || skill.id}
                 className="card-glass rounded-xl p-6 flex flex-col items-center gap-3 hover:glow-border transition-all duration-300 group cursor-default"
               >
                 <Icon className={`w-10 h-10 ${skill.color} group-hover:scale-110 transition-transform`} />

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useHeroContent } from "@/hooks/usePortfolioData";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Save } from "lucide-react";
+
+const API_BASE = "http://localhost:5000/api";
 
 const AdminHero = () => {
   const { data: hero } = useHeroContent();
@@ -22,15 +23,25 @@ const AdminHero = () => {
 
   const handleSave = async () => {
     if (!hero) return;
-    const { error } = await supabase.from("hero_content").update(form).eq("id", hero.id);
-    if (error) { toast.error(error.message); return; }
-    queryClient.invalidateQueries({ queryKey: ["hero_content"] });
-    toast.success("Hero updated!");
+
+    const res = await fetch(`${API_BASE}/hero/${hero._id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form)
+    });
+
+    if (res.ok) {
+      queryClient.invalidateQueries({ queryKey: ["hero_content"] });
+      toast.success("Hero updated in MongoDB!");
+    } else {
+      toast.error("Failed to update hero");
+    }
   };
 
   return (
     <div className="card-glass rounded-xl p-6 space-y-4">
-      <h2 className="font-display text-xl font-bold text-foreground">Hero Section</h2>
+      <h2 className="font-display text-xl font-bold text-foreground">Hero Section (MongoDB)</h2>
+
       {(["name", "title", "status_text", "resume_url"] as const).map((field) => (
         <div key={field}>
           <label className="text-sm font-semibold text-foreground mb-1 block capitalize">{field.replace("_", " ")}</label>

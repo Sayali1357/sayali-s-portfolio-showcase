@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useSocialLinks } from "@/hooks/usePortfolioData";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Plus, Trash2, Pencil, X, Save } from "lucide-react";
+
+const API_BASE = "http://localhost:5000/api";
 
 const AdminSocials = () => {
   const { data: items } = useSocialLinks();
@@ -15,37 +16,48 @@ const AdminSocials = () => {
 
   const handleAdd = async () => {
     if (!form.platform.trim()) return;
-    const { error } = await supabase.from("social_links").insert({ ...form, sort_order: (items?.length || 0) + 1 });
-    if (error) { toast.error(error.message); return; }
-    queryClient.invalidateQueries({ queryKey: ["social_links"] });
-    resetForm();
-    toast.success("Social link added!");
+    const res = await fetch(`${API_BASE}/socials`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...form, sort_order: (items?.length || 0) + 1 })
+    });
+    if (res.ok) {
+      queryClient.invalidateQueries({ queryKey: ["social_links"] });
+      resetForm();
+      toast.success("Social link added!");
+    }
   };
 
   const handleUpdate = async () => {
     if (!editing) return;
-    const { error } = await supabase.from("social_links").update(form).eq("id", editing);
-    if (error) { toast.error(error.message); return; }
-    queryClient.invalidateQueries({ queryKey: ["social_links"] });
-    resetForm();
-    toast.success("Social link updated!");
+    const res = await fetch(`${API_BASE}/socials/${editing}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form)
+    });
+    if (res.ok) {
+      queryClient.invalidateQueries({ queryKey: ["social_links"] });
+      resetForm();
+      toast.success("Social link updated!");
+    }
   };
 
   const handleDelete = async (id: string) => {
-    const { error } = await supabase.from("social_links").delete().eq("id", id);
-    if (error) { toast.error(error.message); return; }
-    queryClient.invalidateQueries({ queryKey: ["social_links"] });
-    toast.success("Deleted!");
+    const res = await fetch(`${API_BASE}/socials/${id}`, { method: 'DELETE' });
+    if (res.ok) {
+      queryClient.invalidateQueries({ queryKey: ["social_links"] });
+      toast.success("Deleted!");
+    }
   };
 
-  const startEdit = (item: NonNullable<typeof items>[0]) => {
-    setEditing(item.id);
+  const startEdit = (item: any) => {
+    setEditing(item._id);
     setForm({ platform: item.platform, url: item.url, icon_name: item.icon_name });
   };
 
   return (
     <div className="card-glass rounded-xl p-6 space-y-4">
-      <h2 className="font-display text-xl font-bold text-foreground">Social Links</h2>
+      <h2 className="font-display text-xl font-bold text-foreground">Social Links (MongoDB)</h2>
       <div className="space-y-3 bg-secondary/30 rounded-lg p-4">
         <div className="grid grid-cols-3 gap-3">
           <input placeholder="Platform" value={form.platform} onChange={(e) => setForm({ ...form, platform: e.target.value })}
@@ -67,15 +79,15 @@ const AdminSocials = () => {
         </div>
       </div>
       <div className="space-y-2">
-        {items?.map((item) => (
-          <div key={item.id} className="flex items-center justify-between bg-secondary/50 rounded-lg p-3">
+        {items?.map((item: any) => (
+          <div key={item._id} className="flex items-center justify-between bg-secondary/50 rounded-lg p-3">
             <div>
               <span className="text-foreground text-sm font-semibold">{item.platform}</span>
               <span className="text-muted-foreground text-xs ml-2">{item.url}</span>
             </div>
             <div className="flex gap-2">
               <button onClick={() => startEdit(item)} className="text-muted-foreground hover:text-primary"><Pencil size={14} /></button>
-              <button onClick={() => handleDelete(item.id)} className="text-muted-foreground hover:text-destructive"><Trash2 size={14} /></button>
+              <button onClick={() => handleDelete(item._id)} className="text-muted-foreground hover:text-destructive"><Trash2 size={14} /></button>
             </div>
           </div>
         ))}
