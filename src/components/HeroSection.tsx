@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Download, Eye, MessageCircle } from "lucide-react";
-import profileImg from "@/assets/profile.jpg";
+import profileImg from "@/assets/profile.jpeg";
 import { useHeroContent, useTechTags } from "@/hooks/usePortfolioData";
 
 const HeroSection = () => {
@@ -92,14 +92,23 @@ const HeroSection = () => {
           <div className="absolute inset-[-20px] border border-white/5 rounded-full animate-[spin_10s_linear_infinite]" />
           <div className="absolute inset-[-40px] border border-white/5 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
 
-          <div className="w-80 h-80 md:w-[450px] md:h-[450px] rounded-[40px] overflow-hidden border border-white/10 relative group-hover:border-primary/50 transition-colors duration-500">
-            <img
-              src={hero?.profile_image_url || profileImg}
-              alt={name}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            />
-            {/* Overlay Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="relative group w-80 h-80 md:w-[450px] md:h-[450px] flex items-center justify-center">
+            {/* Background Circle with Glassmorphism */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/10 via-purple-500/10 to-rose-500/10 border-4 border-white/20 glass-panel shadow-2xl transition-transform duration-500 group-hover:scale-105" />
+            
+            {/* Main Image Container with Circular Clipping for the bottom only */}
+            <div className="absolute inset-0 rounded-full overflow-hidden flex items-end justify-center">
+              <img
+                src={hero?.profile_image_url || profileImg}
+                alt={name}
+                className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
+              />
+            </div>
+            
+            {/* Highlighting the 'Pop-out' effect - the top part of the image can overflow if we remove overflow-hidden, 
+                but for a clean circular look with pop-out, we often use a mask. 
+                However, image 2 shows a perfect circle. Let's make it a clean, premium circle with a thick border. */}
+            <div className="absolute inset-0 rounded-full border-4 border-white shadow-[0_0_30px_rgba(255,255,255,0.2)] pointer-events-none group-hover:border-primary group-hover:shadow-primary/30 transition-all duration-500" />
           </div>
 
           <motion.div
