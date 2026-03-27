@@ -39,7 +39,9 @@ mongoose.connect(mongoURI, {
   serverSelectionTimeoutMS: 5000,
   family: 4
 })
-  .then(() => console.log('Successfully connected to MongoDB Atlas'))
+  .then(() => {
+    console.log(`Successfully connected to MongoDB Atlas (Database: ${mongoose.connection.name})`);
+  })
   .catch(err => console.error('CRITICAL: MongoDB connection error:', err));
 
 // Specialized schemas
