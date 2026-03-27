@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-
 import { API_BASE } from "@/lib/api";
+import { portfolioData } from "@/lib/seedData";
 
 export const useHeroContent = () =>
   useQuery({
@@ -10,17 +10,18 @@ export const useHeroContent = () =>
       if (!res.ok) throw new Error("Failed to fetch hero");
       return res.json();
     },
+    initialData: portfolioData.hero,
   });
 
 export const useTechTags = () =>
   useQuery({
     queryKey: ["tech_tags"],
     queryFn: async () => {
-      // Logic for tech tags could also be fetched from the API if we add routes for them
       const res = await fetch(`${API_BASE}/tech-tags`).catch(() => null);
       if (res && res.ok) return res.json();
-      return [];
+      return portfolioData.techTags;
     },
+    initialData: portfolioData.techTags,
   });
 
 export const useSkills = () =>
@@ -31,6 +32,7 @@ export const useSkills = () =>
       if (!res.ok) throw new Error("Failed to fetch skills");
       return res.json();
     },
+    initialData: portfolioData.skills,
   });
 
 export const useProjects = () =>
@@ -41,6 +43,7 @@ export const useProjects = () =>
       if (!res.ok) throw new Error("Failed to fetch projects");
       return res.json();
     },
+    initialData: portfolioData.projects,
   });
 
 export const useEducation = () =>
@@ -49,8 +52,9 @@ export const useEducation = () =>
     queryFn: async () => {
       const res = await fetch(`${API_BASE}/education`).catch(() => null);
       if (res && res.ok) return res.json();
-      return [];
+      return portfolioData.education;
     },
+    initialData: portfolioData.education,
   });
 
 export const useAchievements = () =>
@@ -59,8 +63,9 @@ export const useAchievements = () =>
     queryFn: async () => {
       const res = await fetch(`${API_BASE}/achievements`).catch(() => null);
       if (res && res.ok) return res.json();
-      return [];
+      return portfolioData.achievements;
     },
+    initialData: portfolioData.achievements,
   });
 
 export const useSocialLinks = () =>
@@ -69,6 +74,7 @@ export const useSocialLinks = () =>
     queryFn: async () => {
       const res = await fetch(`${API_BASE}/socials`).catch(() => null);
       if (res && res.ok) return res.json();
-      return [];
+      return portfolioData.socials;
     },
+    initialData: portfolioData.socials,
   });
