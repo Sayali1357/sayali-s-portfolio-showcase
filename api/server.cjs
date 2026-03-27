@@ -1,7 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config(); // Fallback to current working directory
 
 const app = express();
 app.use(cors());
@@ -28,7 +30,8 @@ const upload = multer({ storage: storage });
 
 const mongoURI = process.env.MONGODB_URI;
 if (!mongoURI) {
-  console.error('MONGODB_URI is not defined in .env');
+  console.error('ERROR: MONGODB_URI is not defined.');
+  console.error('If you are deploying to Vercel, please add MONGODB_URI to your Environment Variables in the Vercel Dashboard.');
   process.exit(1);
 }
 

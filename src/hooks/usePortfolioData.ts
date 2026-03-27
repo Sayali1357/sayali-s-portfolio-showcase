@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-const API_BASE = import.meta.env.VITE_API_URL || "/api";
+import { API_BASE } from "@/lib/api";
 
 export const useHeroContent = () =>
   useQuery({

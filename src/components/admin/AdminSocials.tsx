@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Plus, Trash2, Pencil, X, Save } from "lucide-react";
 
-const API_BASE = "http://localhost:5000/api";
+import { API_BASE } from "@/lib/api";
 
 const AdminSocials = () => {
   const { data: items } = useSocialLinks();

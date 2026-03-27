@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Save } from "lucide-react";
 
-const API_BASE = "http://localhost:5000/api";
+import { API_BASE } from "@/lib/api";
 
 const AdminHero = () => {
   const { data: hero } = useHeroContent();
