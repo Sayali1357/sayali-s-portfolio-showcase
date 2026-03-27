@@ -39,8 +39,8 @@ mongoose.connect(mongoURI, {
   serverSelectionTimeoutMS: 5000,
   family: 4
 })
-  .then(() => console.log('Connected to MongoDB Atlas'))
-  .catch(err => console.error('MongoDB connection error:', err));
+  .then(() => console.log('Successfully connected to MongoDB Atlas'))
+  .catch(err => console.error('CRITICAL: MongoDB connection error:', err));
 
 // Specialized schemas
 const SkillSchema = new mongoose.Schema({
@@ -112,8 +112,15 @@ const TechTag = mongoose.model('TechTag', TechTagSchema);
 
 // CRUD Routes
 app.get('/api/projects', async (req, res) => {
-  const projects = await Project.find().sort({ sort_order: 1 });
-  res.json(projects);
+  try {
+    console.log('Fetching projects from database...');
+    const projects = await Project.find().sort({ sort_order: 1 });
+    console.log(`Found ${projects.length} projects.`);
+    res.json(projects);
+  } catch (err) {
+    console.error('Error fetching projects:', err);
+    res.status(500).json({ error: err.message });
+  }
 });
 app.post('/api/projects', upload.single('image'), async (req, res) => {
   try {
