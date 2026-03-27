@@ -47,7 +47,8 @@ const portfolioData = {
             emoji: "🌾",
             color: "bg-orange-600",
             tags: ["React", "Node.js", "Agricultural Tech"],
-            link: "https://github.com/yashwawge/sih",
+            link: "https://shree-anna-sahashra.vercel.app",
+            github_url: "https://github.com/yashwawge/sih",
             sort_order: 1
         },
         {
